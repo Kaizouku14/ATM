@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class BankManagement {
+public class AtmManagement {
 
     private double money;
     private static final String BANK = "MoneyBank.txt";
@@ -142,7 +142,6 @@ public class BankManagement {
         return newBalance;
     }
 
-    //Recording the transaction
     public void RecordActivity(String username,String money){
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(LOGS,true))) {
@@ -158,7 +157,6 @@ public class BankManagement {
             }
     }
 
-    //View the transaction history
     public void ViewActivity(String username){
         try (BufferedReader reader = new BufferedReader(new FileReader(LOGS))) {
             String line;
