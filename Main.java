@@ -8,9 +8,9 @@ public class Main {
         int selected;
 
        while(true) {
-           System.out.println("\nBANK SYSTEM MANAGEMENT PORTAL");
+           System.out.println("\nAUTOMATED TELLER MACHINE SYSTEM");
            System.out.println("[1] Login Account");
-           System.out.println("[2] Sign up Account");
+           System.out.println("[2] Register Account");
            System.out.println();
            System.out.println("[3] Exit Program");
            System.out.print("Select Option : ");
@@ -27,16 +27,15 @@ public class Main {
                    String password = sc.nextLine();
 
                  if(users.LoginAccount(username,password))
-                     BankMenu(sc,username); //bank menu
+                     BankMenu(sc,username);
                  else
                      System.out.println("Login failed!");
                }
                case 2 -> {
-                   System.out.println("\nSign up Account");
+                   System.out.println("\nRegister Account");
                    sc.nextLine();
                    System.out.print("Username : ");
-                   String username = sc.nextLine();
-                    users.setUsername(username);
+                    users.setUsername(sc.nextLine());
 
                    System.out.print("Password : ");
                    String password = sc.nextLine();
@@ -65,7 +64,7 @@ public class Main {
     }
 
     public static void BankMenu(Scanner sc, String username){
-        BankManagement bank = new BankManagement();
+        AtmManagement bank = new AtmManagement();
 
         int choice;
         while (true) {
@@ -86,24 +85,33 @@ public class Main {
                   case 2 ->{
                       System.out.println("\nDeposit Money");
                       System.out.print("Enter the amount of money to be deposited: ");
-                          bank.setMoney(sc.nextDouble());
+                    try{
+                        bank.setMoney(sc.nextDouble());
 
-                      if(bank.CheckAccount(username)) {
-                          bank.UpdateDeposit(username, bank.getMoney());
-                          bank.RecordActivity(username, "+" + bank.getMoney());
-                      }else {
-                          bank.DepositMoney(username, bank.getMoney());
-                      }
+                        if(bank.CheckAccount(username)) {
+                            bank.UpdateDeposit(username, bank.getMoney());
+                            bank.RecordActivity(username, "+" + bank.getMoney());
+                        }else {
+                            bank.DepositMoney(username, bank.getMoney());
+                        }
+                    }catch(NumberFormatException e){
+                        System.out.println("Please enter a numerical value");
+                    }
+
                   }
                   case 3 -> {
                       System.out.println("\nWithdraw Money");
                       System.out.print("Enter the amount of money to be withdrawn : ");
-                       bank.setMoney(sc.nextDouble());
+                      try{
+                           bank.setMoney(sc.nextDouble());
+                           if(bank.CheckAccount(username)) {
+                               bank.withdrawMoney(username, bank.getMoney());
+                               bank.RecordActivity(username, "-" + bank.getMoney());
+                           }
 
-                       if(bank.CheckAccount(username)) {
-                           bank.withdrawMoney(username, bank.getMoney());
-                           bank.RecordActivity(username, "-" + bank.getMoney());
-                       }
+                      }catch(NumberFormatException e){
+                          System.out.println("Please enter a numerical value");
+                      }
                   }
                   case 4 ->{
                       System.out.println("View Transaction History");
