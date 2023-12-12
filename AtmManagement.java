@@ -59,17 +59,19 @@ public class AtmManagement {
             String account = String.format("%-10s|$%-5.2f%n", username, amount);
                 writer.append(account);
                 System.out.println("Deposited Successfully!");
+                 RecordActivity(username, "+" + amount);
         }catch (IOException e){
             System.out.println("An error Occurred!" + e.getMessage());
         }
     }
 
-    public void UpdateDeposit(String username, double withdrawn){
+    public void UpdateDeposit(String username, double deposited){
         ArrayList<String> temp = readBankFile();
 
-        double newBalance = processDeposited(username,withdrawn,temp);
+        double newBalance = processDeposited(username,deposited,temp);
         if (newBalance >= 0) {
             System.out.println("\nDeposited Successfully! New balance : " + newBalance);
+            RecordActivity(username, "+" + deposited);
             writeBackToFile(temp);
         }
     }
@@ -82,6 +84,7 @@ public class AtmManagement {
         if (newBalance >= 0) {
             System.out.println("\nWithdrawn Successfully! New balance : " + newBalance);
             writeBackToFile(temp);
+            RecordActivity(username, "-" + withdrawn);
         }
     }
 
@@ -142,7 +145,7 @@ public class AtmManagement {
         return newBalance;
     }
 
-    public void RecordActivity(String username,String money){
+    private void RecordActivity(String username,String money){
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(LOGS,true))) {
             LocalDateTime time = LocalDateTime.now();
