@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -10,10 +11,11 @@ public class Main {
        while(true) {
            System.out.println("\nAUTOMATED TELLER MACHINE SYSTEM");
            System.out.println("[1] Login Account");
-           System.out.println("[2] Register Account");
-           System.out.println();
+           System.out.println("[2] Register Account\n");
            System.out.println("[3] Exit Program");
            System.out.print("Select Option : ");
+           try {
+
            selected = sc.nextInt();
 
            switch (selected) {
@@ -26,40 +28,44 @@ public class Main {
                    System.out.print("Password : ");
                    String password = sc.nextLine();
 
-                 if(users.LoginAccount(username,password))
-                     BankMenu(sc,username);
-                 else
-                     System.out.println("Login failed!");
+                   if (users.LoginAccount(username, password))
+                       BankMenu(sc, username);
+                   else
+                       System.out.println("Login failed!");
                }
                case 2 -> {
                    System.out.println("\nRegister Account");
                    sc.nextLine();
                    System.out.print("Username : ");
-                    users.setUsername(sc.nextLine());
+                   users.setUsername(sc.nextLine());
 
                    System.out.print("Password : ");
                    String password = sc.nextLine();
 
                    if (users.checkPassword(password)) {
-                     System.out.print("Password : ");
-                         password = sc.nextLine();
+                       System.out.print("Password : ");
+                       password = sc.nextLine();
 
-                        if(users.checkPassword(password))
-                            System.out.println("Password must contain 8 characters!");
-                        else
-                            users.setPassword(password);
+                       if (users.checkPassword(password))
+                           System.out.println("Password must contain 8 characters!");
+                       else
+                           users.setPassword(password);
                    } else {
                        users.setPassword(password);
                    }
-                  users.SignupAccount(users.getUsername(), users.getPassword());
+                   users.SignupAccount(users.getUsername(), users.getPassword());
                }
-               case 3 ->{
+               case 3 -> {
                    System.out.println("Exiting program...");
                    System.exit(0);
                    sc.close();
                }
                default -> System.out.println("Invalid Input! , please try again");
            }
+       }catch(InputMismatchException e){
+            sc.nextLine();
+            System.out.println("Please enter a numerical value");
+        }
        }
     }
 
@@ -68,18 +74,18 @@ public class Main {
 
         int choice;
         while (true) {
+
             System.out.println("\nPlease choose an option:");
             System.out.println("1. Check Balance");
             System.out.println("2. Deposit Money");
             System.out.println("3. Withdraw Money");
-            System.out.println("4. View Transaction History");
-            System.out.println();
+            System.out.println("4. View Transaction History\n");
             System.out.println("5. Exit");
-
             System.out.print("Enter your choice: ");
-            choice = sc.nextInt();
+            try{
+                choice = sc.nextInt();
 
-            switch (choice){
+                switch (choice){
                   case 1 ->
                       System.out.println("\nYour Current Balance is : " + bank.viewBalance(username));
                   case 2 ->{
@@ -90,14 +96,13 @@ public class Main {
 
                         if(bank.CheckAccount(username)) {
                             bank.UpdateDeposit(username, bank.getMoney());
-                            bank.RecordActivity(username, "+" + bank.getMoney());
                         }else {
                             bank.DepositMoney(username, bank.getMoney());
                         }
-                    }catch(NumberFormatException e){
+                    }catch(InputMismatchException e){
+                        sc.nextLine();
                         System.out.println("Please enter a numerical value");
                     }
-
                   }
                   case 3 -> {
                       System.out.println("\nWithdraw Money");
@@ -106,10 +111,9 @@ public class Main {
                            bank.setMoney(sc.nextDouble());
                            if(bank.CheckAccount(username)) {
                                bank.withdrawMoney(username, bank.getMoney());
-                               bank.RecordActivity(username, "-" + bank.getMoney());
                            }
-
-                      }catch(NumberFormatException e){
+                      }catch(InputMismatchException e){
+                          sc.nextLine();
                           System.out.println("Please enter a numerical value");
                       }
                   }
@@ -123,7 +127,10 @@ public class Main {
                   }
                 default -> System.out.println("Invalid Input! , please try again");
             }
-
+            }catch (InputMismatchException e){
+                sc.nextLine();
+                System.out.println("Please enter a numerical value");
+            }
         }
     }
 }
