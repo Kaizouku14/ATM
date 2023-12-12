@@ -6,7 +6,6 @@ public class UserManagement {
     private String password;
     private static final String BANK_USERS  = "BankAccounts.txt";
 
-    //Getters and setters
     public String getUsername() {return username;}
     public String getPassword() {return password;}
     public void setUsername(String username) {this.username = username;}
@@ -36,7 +35,7 @@ public class UserManagement {
             }else {
                 while ((line = reader.readLine()) != null) {
                     String[] parts = line.replace("|", " ").trim().split("\\s+");
-                    if (parts[0].equalsIgnoreCase(username))
+                    if (parts[0].equals(username))
                         return true;
                 }
             }
@@ -68,7 +67,7 @@ public class UserManagement {
            }else {
                while ((line = reader.readLine()) != null) {
                    String[] parts = line.replace("|", " ").trim().split("\\s+");
-                   if (parts[0].equalsIgnoreCase(username) && parts[1].equalsIgnoreCase(password))
+                   if (parts[0].equals(username) && parts[1].equals(password))
                         return true;
                }
            }
